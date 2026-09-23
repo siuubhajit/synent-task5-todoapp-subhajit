@@ -1,5 +1,6 @@
-// in-memory task list for now — persistence comes later
+
 var tasks = [];
+
 
 var input = document.getElementById("taskInput");
 var addBtn = document.getElementById("addBtn");
@@ -18,12 +19,37 @@ function addTask() {
   render();
 }
 
+
+
 function render() {
   list.innerHTML = "";
 
   for (var i = 0; i < tasks.length; i++) {
     var li = document.createElement("li");
-    li.textContent = tasks[i].text;
+
+    var label = document.createElement("span");
+    label.textContent = tasks[i].text;
+
+
+
+    var del = document.createElement("button");
+    del.textContent = "✕";
+    del.className = "delete-btn";
+    del.dataset.index = i;
+    del.addEventListener("click", onDeleteClick);
+
+
+    li.appendChild(label);
+    li.appendChild(del);
     list.appendChild(li);
   }
 }
+
+
+
+function onDeleteClick(e) {
+  var idx = Number(e.target.dataset.index);
+  tasks.splice(idx, 1);
+  render();
+}
+
