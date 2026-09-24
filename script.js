@@ -1,6 +1,4 @@
 
-
-
 var STORAGE_KEY = "todo-tasks-csv";
 
 var tasks = loadTasks();
@@ -8,11 +6,23 @@ var tasks = loadTasks();
 var input = document.getElementById("taskInput");
 var addBtn = document.getElementById("addBtn");
 var list = document.getElementById("taskList");
+var counter = document.getElementById("counter");
+var clearDoneBtn = document.getElementById("clearDoneBtn");
+
+
+
 
 addBtn.addEventListener("click", addTask);
+clearDoneBtn.addEventListener("click", clearCompleted);
+
+
+
+
+input.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") addTask();
+});
+
 render();
-
-
 
 function addTask() {
   var text = input.value.trim();
@@ -20,15 +30,14 @@ function addTask() {
     return;
   }
 
+
+
+
   tasks.push({ id: Date.now(), text: text, done: false });
   input.value = "";
   render();
   saveTasks();
 }
-
-
-
-
 
 function render() {
   list.innerHTML = "";
@@ -37,14 +46,17 @@ function render() {
     var li = document.createElement("li");
     if (tasks[i].done) li.classList.add("done");
 
+
+
+
+
+
+
     var check = document.createElement("input");
     check.type = "checkbox";
     check.checked = tasks[i].done;
     check.dataset.index = i;
     check.addEventListener("change", onToggleClick);
-
-
-
 
     var label = document.createElement("span");
     label.textContent = tasks[i].text;
@@ -58,11 +70,21 @@ function render() {
 
 
 
+
     li.appendChild(check);
     li.appendChild(label);
     li.appendChild(del);
     list.appendChild(li);
   }
+
+  var remaining = tasks.filter(function (t) { return !t.done; }).length;
+  counter.textContent = remaining + (remaining === 1 ? " task left" : " tasks left");
+}
+
+function clearCompleted() {
+  tasks = tasks.filter(function (t) { return !t.done; });
+  render();
+  saveTasks();
 }
 
 function onDeleteClick(e) {
@@ -86,15 +108,11 @@ function onToggleClick(e) {
 
 
 
-
 function csvEscape(value) {
   var str = String(value);
   if (/[",\n]/.test(str)) {
     return '"' + str.replace(/"/g, '""') + '"';
   }
-
-
-
   return str;
 }
 
@@ -131,34 +149,31 @@ function parseCSVLine(line) {
   for (var i = 0; i < line.length; i++) {
     var ch = line[i];
 
+
     if (inQuotes) {
-      if (ch === '"' && line[i + 1] === '"')
-        
-        
-        
-        {
+      
+      if (ch === '"' && line[i + 1] === '"') {
         current += '"';
         i++;
-      } else if (ch === '"') {
+      } 
+      else if (ch === '"') {
         inQuotes = false;
-      } else 
-        
-        
-        {
+      } 
+      else {
         current += ch;
       }
-    } else if (ch === '"') {
+    } 
+    else if (ch === '"') {
       inQuotes = true;
-    } else if (ch === ",") {
+    } 
+    else if (ch === ",") {
       fields.push(current);
       current = "";
-    } else {
+    } 
+    else {
       current += ch;
     }
   }
-
-
-
 
   fields.push(current);
   return fields;
@@ -167,6 +182,7 @@ function parseCSVLine(line) {
 function saveTasks() {
   localStorage.setItem(STORAGE_KEY, tasksToCSV(tasks));
 }
+
 
 
 
