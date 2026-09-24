@@ -1,17 +1,14 @@
 * { box-sizing: border-box; }
 
+
+
+
 body {
   font-family: system-ui, "Segoe UI", sans-serif;
   background: #f4f5f7;
   margin: 0;
-
-
-
-  
   padding: 2rem 1rem;
 }
-
-
 
 
 
@@ -20,8 +17,6 @@ body {
   margin: 0 auto;
   background: #fff;
   border-radius: 10px;
-
-
   padding: 1.5rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
@@ -31,37 +26,35 @@ h1 {
   font-size: 1.4rem;
 }
 
-
-
-
 .add-row {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
+
+
+
 #taskInput {
   flex: 1;
   padding: 0.5rem 0.6rem;
   border: 1px solid #ccc;
-
-
   border-radius: 6px;
   font-size: 1rem;
 }
-
-
 
 #addBtn {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
   background: #3a6df0;
-
-
   color: #fff;
   cursor: pointer;
 }
+
+
+
+
 
 #addBtn:hover { background: #2f59c7; }
 
@@ -71,14 +64,16 @@ ul#taskList {
   margin: 0;
 }
 
+
+
+
+
+
 ul#taskList li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 0.6rem 0.2rem;
-
-
   border-bottom: 1px solid #eee;
 }
 
@@ -95,6 +90,19 @@ ul#taskList li {
 
 
 
+
+
+
 .delete-btn:hover {
   color: #922b21;
+}
+
+li span {
+  flex: 1;
+  margin: 0 0.6rem;
+}
+
+li.done span {
+  text-decoration: line-through;
+  color: #9a9a9a;
 }

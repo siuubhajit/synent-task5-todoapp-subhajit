@@ -2,11 +2,17 @@
 var tasks = [];
 
 
+
+
 var input = document.getElementById("taskInput");
 var addBtn = document.getElementById("addBtn");
 var list = document.getElementById("taskList");
 
 addBtn.addEventListener("click", addTask);
+
+
+
+
 
 function addTask() {
   var text = input.value.trim();
@@ -14,10 +20,13 @@ function addTask() {
     return;
   }
 
-  tasks.push({ text: text });
+  tasks.push({ text: text, done: false });
   input.value = "";
   render();
 }
+
+
+
 
 
 
@@ -26,9 +35,22 @@ function render() {
 
   for (var i = 0; i < tasks.length; i++) {
     var li = document.createElement("li");
+    if (tasks[i].done) li.classList.add("done");
+
+
+
+
+    var check = document.createElement("input");
+    check.type = "checkbox";
+    check.checked = tasks[i].done;
+    check.dataset.index = i;
+    check.addEventListener("change", onToggleClick);
 
     var label = document.createElement("span");
     label.textContent = tasks[i].text;
+
+
+
 
 
 
@@ -38,12 +60,16 @@ function render() {
     del.dataset.index = i;
     del.addEventListener("click", onDeleteClick);
 
-
+    li.appendChild(check);
     li.appendChild(label);
     li.appendChild(del);
     list.appendChild(li);
   }
 }
+
+
+
+
 
 
 
@@ -53,3 +79,12 @@ function onDeleteClick(e) {
   render();
 }
 
+
+
+
+
+function onToggleClick(e) {
+  var idx = Number(e.target.dataset.index);
+  tasks[idx].done = e.target.checked;
+  render();
+}
