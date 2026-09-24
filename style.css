@@ -1,3 +1,4 @@
+
 * { box-sizing: border-box; }
 
 body {
@@ -19,6 +20,8 @@ body {
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
+
+
 h1 {
   margin-top: 0;
   font-size: 1.4rem;
@@ -27,11 +30,10 @@ h1 {
 .add-row {
   display: flex;
   gap: 0.5rem;
+
+  
   margin-bottom: 1rem;
 }
-
-
-
 
 #taskInput {
   flex: 1;
@@ -50,16 +52,54 @@ h1 {
   cursor: pointer;
 }
 
-
-
-
 #addBtn:hover { background: #2f59c7; }
+
+.filters {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.filter-btn {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 999px;
+
+
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  color: #555;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  border-color: #3a6df0;
+  color: #3a6df0;
+}
+
+
+
+.empty-state {
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
+  padding: 1rem 0;
+
+  display: none;
+}
+
+
+
 
 ul#taskList {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
+
+
+
 
 ul#taskList li {
   display: flex;
@@ -68,9 +108,6 @@ ul#taskList li {
   padding: 0.6rem 0.2rem;
   border-bottom: 1px solid #eee;
 }
-
-
-
 
 .delete-btn {
   border: none;
@@ -90,9 +127,6 @@ li span {
   margin: 0 0.6rem;
 }
 
-
-
-
 li.done span {
   text-decoration: line-through;
   color: #9a9a9a;
@@ -106,6 +140,7 @@ li.done span {
   font-size: 0.85rem;
   color: #777;
 }
+
 
 
 

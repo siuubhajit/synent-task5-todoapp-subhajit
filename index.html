@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>To-Do List</title>
+
+
 <link rel="stylesheet" href="style.css">
-
-
 </head>
 <body>
+
+
+
 
 
   <div class="app">
     <h1>To-Do List</h1>
 
     <div class="add-row">
-
       <input type="text" id="taskInput" placeholder="What needs doing?">
       <button id="addBtn">Add</button>
     </div>
@@ -24,7 +25,20 @@
 
 
 
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="active">Active</button>
+      <button class="filter-btn" data-filter="completed">Completed</button>
+    </div>
+
+
+
+
     <ul id="taskList"></ul>
+    <p id="emptyState" class="empty-state">Nothing here yet — add your first task above.</p>
+
+
+
 
     <div class="footer-row">
       <span id="counter"></span>

@@ -8,15 +8,23 @@ var addBtn = document.getElementById("addBtn");
 var list = document.getElementById("taskList");
 var counter = document.getElementById("counter");
 var clearDoneBtn = document.getElementById("clearDoneBtn");
-
+var emptyState = document.getElementById("emptyState");
+var filterBtns = document.querySelectorAll(".filter-btn");
+var currentFilter = "all";
 
 
 
 addBtn.addEventListener("click", addTask);
 clearDoneBtn.addEventListener("click", clearCompleted);
 
-
-
+filterBtns.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    currentFilter = btn.dataset.filter;
+    filterBtns.forEach(function (b) { b.classList.remove("active"); });
+    btn.classList.add("active");
+    render();
+  });
+});
 
 input.addEventListener("keydown", function (e) {
   if (e.key === "Enter") addTask();
@@ -42,40 +50,44 @@ function addTask() {
 function render() {
   list.innerHTML = "";
 
-  for (var i = 0; i < tasks.length; i++) {
+  var visible = tasks.filter(function (t) {
+    if (currentFilter === "active") return !t.done;
+    if (currentFilter === "completed") return t.done;
+    return true;
+  });
+
+
+
+
+  visible.forEach(function (task) {
     var li = document.createElement("li");
-    if (tasks[i].done) li.classList.add("done");
-
-
-
-
-
-
+    if (task.done) li.classList.add("done");
 
     var check = document.createElement("input");
     check.type = "checkbox";
-    check.checked = tasks[i].done;
-    check.dataset.index = i;
+    check.checked = task.done;
+    check.dataset.id = task.id;
     check.addEventListener("change", onToggleClick);
 
     var label = document.createElement("span");
-    label.textContent = tasks[i].text;
+    label.textContent = task.text;
 
     var del = document.createElement("button");
     del.textContent = "✕";
     del.className = "delete-btn";
-    del.dataset.index = i;
+    del.dataset.id = task.id;
     del.addEventListener("click", onDeleteClick);
-
-
-
-
 
     li.appendChild(check);
     li.appendChild(label);
     li.appendChild(del);
     list.appendChild(li);
-  }
+  });
+
+
+
+
+  emptyState.style.display = visible.length ? "none" : "block";
 
   var remaining = tasks.filter(function (t) { return !t.done; }).length;
   counter.textContent = remaining + (remaining === 1 ? " task left" : " tasks left");
@@ -87,16 +99,20 @@ function clearCompleted() {
   saveTasks();
 }
 
+
+
+
 function onDeleteClick(e) {
-  var idx = Number(e.target.dataset.index);
-  tasks.splice(idx, 1);
+  var id = Number(e.target.dataset.id);
+  tasks = tasks.filter(function (t) { return t.id !== id; });
   render();
   saveTasks();
 }
 
 function onToggleClick(e) {
-  var idx = Number(e.target.dataset.index);
-  tasks[idx].done = e.target.checked;
+  var id = Number(e.target.dataset.id);
+  var task = tasks.find(function (t) { return t.id === id; });
+  if (task) task.done = e.target.checked;
   render();
   saveTasks();
 }
@@ -125,8 +141,14 @@ function tasksToCSV(list) {
 }
 
 function csvToTasks(csv) {
-  var lines = csv.split("\n").filter(function (l) { return l.trim().length; });
+  var lines = csv.split("\n")
+    .map(function (l) { return l.replace(/\r$/, ""); })
+    .filter(function (l) { return l.trim().length; });
   lines.shift(); 
+
+
+
+
 
   return lines.map(function (line) {
     var fields = parseCSVLine(line);
@@ -149,28 +171,21 @@ function parseCSVLine(line) {
   for (var i = 0; i < line.length; i++) {
     var ch = line[i];
 
-
     if (inQuotes) {
-      
       if (ch === '"' && line[i + 1] === '"') {
         current += '"';
         i++;
-      } 
-      else if (ch === '"') {
+      } else if (ch === '"') {
         inQuotes = false;
-      } 
-      else {
+      } else {
         current += ch;
       }
-    } 
-    else if (ch === '"') {
+    } else if (ch === '"') {
       inQuotes = true;
-    } 
-    else if (ch === ",") {
+    } else if (ch === ",") {
       fields.push(current);
       current = "";
-    } 
-    else {
+    } else {
       current += ch;
     }
   }
@@ -179,11 +194,12 @@ function parseCSVLine(line) {
   return fields;
 }
 
+
+
+
 function saveTasks() {
   localStorage.setItem(STORAGE_KEY, tasksToCSV(tasks));
 }
-
-
 
 
 
